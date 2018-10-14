@@ -8,4 +8,8 @@ app.get('/health-check', (req, res) => {
     });
 });
 
+app.post('/api/v1/watch/user/:userId/stream/:streamId', () => {
+    res.status(404).send({});
+});
+
 export default app;
