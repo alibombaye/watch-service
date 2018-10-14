@@ -1,5 +1,7 @@
-import { UserNotRecognisedError } from '../errors/errors';
+import { findUser } from '../connector/userServiceConnector';
+import { findStream } from '../connector/streamServiceConnector';
 
 export const watchService = (userId, streamId) => {
-    throw new UserNotRecognisedError('not a recognised user');
+    findUser(userId);
+    findStream(streamId);
 }
