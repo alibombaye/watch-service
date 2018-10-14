@@ -1,5 +1,11 @@
 import request from 'supertest';
 import app from '../src/server/app';
+import { findUser } from '../src/connector/userServiceConnector';
+import { findStream } from '../src/connector/streamServiceConnector';
+import { StreamNotRecognisedError, UserNotRecognisedError } from '../src/errors/errors';
+
+jest.mock('../src/connector/streamServiceConnector');
+jest.mock('../src/connector/userServiceConnector');
 
 describe('get /health-check', () => {
     let response;
@@ -23,8 +29,16 @@ describe('post /api/v1/watch', () => {
         const NOT_A_VALID_USER = 999;
 
         beforeEach(async ()=> {
+            findUser.mockImplementation(() => {
+                throw new UserNotRecognisedError('not a recognised user')
+            });
             response = await request(app).post(`/api/v1/watch/user/${NOT_A_VALID_USER}/stream/1`);
         });
+        
+        afterEach(() => {
+            findUser.mockReset();
+            findStream.mockReset();
+        })
 
         test('should respond with a 404', () => {
             expect(response.statusCode).toBe(404);
@@ -41,13 +55,22 @@ describe('post /api/v1/watch', () => {
 
     describe('when the user does exist', () => {
         
-        describe.skip('when the stream does not exist', () => {
+        describe('when the stream does not exist', () => {
             let response;
             const NOT_A_VALID_STREAM = 999;
     
             beforeEach(async ()=> {
+                findUser.mockImplementation(() => {});
+                findStream.mockImplementation(() => {
+                    throw new StreamNotRecognisedError('not a recognised stream')
+                });
                 response = await request(app).post(`/api/v1/watch/user/1/stream/${NOT_A_VALID_STREAM}`);
             });
+
+            afterEach(() => {
+                findUser.mockReset();
+                findStream.mockReset();
+            })
 
             test('should respond with a 404', () => {
                 expect(response.statusCode).toBe(404);
