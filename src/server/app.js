@@ -10,7 +10,8 @@ app.get('/health-check', (req, res) => {
 
 app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
     res.status(404).send({
-        success: 'false'
+        success: 'false',
+        message: 'not a recognised user'
     });
 });
 

@@ -31,7 +31,11 @@ describe('post /api/v1/watch', () => {
         });
 
         test('should respond with "success: false"', () => {
-            expect(response.body).toEqual({ success: 'false' });
+            expect(response.body.success).toEqual('false');
+        });
+
+        test('should respond with "message: not a recognised user"', () => {
+            expect(response.body.message).toEqual('not a recognised user');
         });
     });
 });
