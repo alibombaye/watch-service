@@ -38,4 +38,30 @@ describe('post /api/v1/watch', () => {
             expect(response.body.message).toEqual('not a recognised user');
         });
     });
+
+    describe('when the user does exist', () => {
+        
+        describe.skip('when the stream does not exist', () => {
+            let response;
+            const NOT_A_VALID_STREAM = 999;
+    
+            beforeEach(async ()=> {
+                response = await request(app).post(`/api/v1/watch/user/1/stream/${NOT_A_VALID_STREAM}`);
+            });
+
+            test('should respond with a 404', () => {
+                expect(response.statusCode).toBe(404);
+            });
+
+            test('should respond with "success: false"', () => {
+                expect(response.body.success).toEqual('false');
+            });
+    
+            test('should respond with "message: not a recognised user"', () => {
+                expect(response.body.message).toEqual('not a recognised stream');
+            });
+
+        });
+
+    });
 });

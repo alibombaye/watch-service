@@ -4,8 +4,10 @@
   "description": "This service manages the streams that registered users are currently watching",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest src",
     "test-integration": "jest test-integration/*.js",
+    "test-all": "jest",
+    "test:watch": "jest --onlyChanged --watch",
     "start": "nodemon src/server/server.js --exec babel-node --"
   },
   "repository": {
