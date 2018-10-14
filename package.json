@@ -1,0 +1,19 @@
+{
+  "name": "watch-service",
+  "version": "1.0.0",
+  "description": "This service manages the streams that registered users are currently watching",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibombaye/watch-service.git"
+  },
+  "author": "Fawad Ali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alibombaye/watch-service/issues"
+  },
+  "homepage": "https://github.com/alibombaye/watch-service#readme"
+}
