@@ -4,7 +4,9 @@
   "description": "This service manages the streams that registered users are currently watching",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-integration": "jest test-integration/*.js",
+    "start": "nodemon src/server/server.js --exec babel-node --"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,8 @@
     "nodemon": "^1.18.4"
   },
   "devDependencies": {
-    "eslint": "^5.7.0"
+    "eslint": "^5.7.0",
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0"
   }
 }
