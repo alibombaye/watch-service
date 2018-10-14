@@ -6,7 +6,7 @@ describe('get /health-check', () => {
 
     beforeEach(async ()=> {
         response = await request(app).get('/health-check');
-    })
+    });
 
     test('should respond with 200 when the app is running', () => {
         expect(response.statusCode).toBe(200);
@@ -19,15 +19,18 @@ describe('get /health-check', () => {
 
 describe('post /api/v1/watch', () => {
     describe('when the user does not exist', () => {
-        test('should respond with a 404', async () => {
-            const NOT_A_VALID_USER = 999;
-            const response = await request(app).post(`/api/v1/watch/user/${NOT_A_VALID_USER}/stream/1`);
+        let response;
+        const NOT_A_VALID_USER = 999;
+
+        beforeEach(async ()=> {
+            response = await request(app).post(`/api/v1/watch/user/${NOT_A_VALID_USER}/stream/1`);
+        });
+
+        test('should respond with a 404', () => {
             expect(response.statusCode).toBe(404);
         });
 
-        test('should respond with "success: false"', async () => {
-            const NOT_A_VALID_USER = 999;
-            const response = await request(app).post(`/api/v1/watch/user/${NOT_A_VALID_USER}/stream/1`);
+        test('should respond with "success: false"', () => {
             expect(response.body).toEqual({ success: 'false' });
         });
     });
