@@ -5,3 +5,8 @@ export const watchService = (userId, streamId) => {
     findUser(userId);
     findStream(streamId);
 }
+
+export const getWatchingListForUser = (userId) => {
+    findUser(userId);
+    return [];
+}

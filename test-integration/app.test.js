@@ -142,5 +142,28 @@ describe('get /api/v1/watch', () => {
         test('should respond with "message: not a recognised user"', () => {
             expect(response.body.message).toEqual('not a recognised user');
         });
-    })
+    });
+
+    describe('when the user does exist', () => {
+        describe('when the user is not watch anything', ()=> {
+            let response;
+    
+            beforeEach(async ()=> {
+                findUser.mockImplementation(() => {});
+                response = await request(app).get(`/api/v1/watch/user/1`);
+            });
+
+            test('should respond with a 200', () => {
+                expect(response.statusCode).toBe(200);
+            });
+
+            test('should respond with "success: true"', () => {
+                expect(response.body.success).toEqual('true');
+            });
+
+            test('should respond with "message: user is currently not watching any streams"', () => {
+                expect(response.body.message).toEqual('user is currently not watching any streams');
+            });
+        });
+    });
 });
