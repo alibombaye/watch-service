@@ -116,10 +116,31 @@ describe('post /api/v1/watch', () => {
 
 describe('get /api/v1/watch', () => {
     describe('when the user does not exist', () => {
-        test('should respond with a 404', async () => {
-            const NOT_A_VALID_USER = 999;
-            const response = await request(app).get(`/api/v1/watch/user/${NOT_A_VALID_USER}`);
+        let response;
+        const NOT_A_VALID_USER = 999;
+
+        beforeEach(async ()=> {
+            findUser.mockImplementation(() => {
+                throw new UserNotRecognisedError('not a recognised user')
+            });
+            response = await request(app).get(`/api/v1/watch/user/${NOT_A_VALID_USER}`);
+        });
+        
+        afterEach(() => {
+            findUser.mockReset();
+            findStream.mockReset();
+        })
+
+        test('should respond with a 404', () => {
             expect(response.statusCode).toBe(404);
+        });
+
+        test('should respond with "success: false"', () => {
+            expect(response.body.success).toEqual('false');
+        });
+
+        test('should respond with "message: not a recognised user"', () => {
+            expect(response.body.message).toEqual('not a recognised user');
         });
     })
 });

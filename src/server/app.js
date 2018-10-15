@@ -27,7 +27,10 @@ app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
 });
 
 app.get('/api/v1/watch/user/:userId', (req, res) => {
-    res.status(404).send({})
+    res.status(404).send({
+        success: 'false',
+        message: 'not a recognised user'    
+    })
 });
 
 export default app;
