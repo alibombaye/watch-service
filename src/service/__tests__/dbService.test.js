@@ -1,4 +1,4 @@
-import { watchingDb, dbAddStreamToUserWatchingList } from '../dbService';
+import { dbAddStreamToUserWatchingList } from '../dbService';
 
 describe('dbService', () => {
     describe('dbAddStreamToUserWatchingList', () => {
@@ -10,7 +10,7 @@ describe('dbService', () => {
                 
                 expect(watchingDb).toEqual({ 1: { streams: [1]} });
             });
-        })
+        });
 
     });
 });

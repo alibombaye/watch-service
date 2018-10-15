@@ -1,4 +1,4 @@
-export let watchingDb = {}
+global.watchingDb = {}
 
 export const dbAddStreamToUserWatchingList = (userId, streamId) => {
     if (!watchingDb || !watchingDb[userId]) {
