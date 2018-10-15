@@ -65,13 +65,19 @@ describe('getWatchingListForUser', () => {
         describe('when the user is not watching anything', () => {
             test('should respond with []', () => {
                 findUser.mockImplementation(() => {});
+                const spy = jest.spyOn(DbService, 'dbGetWatchingListForUser').mockImplementation(() => []);
+
                 expect(getWatchingListForUser(1)).toEqual([]);
+                expect(spy).toBeCalledWith(1);
             });
         });
 
         describe('when the user is watching a single stream', () => {
             findUser.mockImplementation(() => {});
-            expect(getWatchingListForUser(1)).toEqual([]);
+            const spy = jest.spyOn(DbService, 'dbGetWatchingListForUser').mockImplementation(() => [1]);
+
+            expect(getWatchingListForUser(1)).toEqual([1]);
+            expect(spy).toBeCalledWith(1);
         })
     });
 })
