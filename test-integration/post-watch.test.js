@@ -7,7 +7,24 @@ import { StreamNotRecognisedError, UserNotRecognisedError } from '../src/errors/
 jest.mock('../src/connector/streamServiceConnector');
 jest.mock('../src/connector/userServiceConnector');
 
-describe('post /api/v1/watch', () => {
+describe.only('post /api/v1/watch', () => {
+
+    describe('Validate input parameters', () => {
+        describe('when the userId is missing from the request', () => {
+            test('should respond with a 404', async () => {
+                const response = await request(app).post(`/api/v1/watch/user//stream/1`);
+                expect(response.statusCode).toBe(404);
+            });
+        });
+
+        describe('when the streamIs is missing from the request', () => {
+            test('should respond with a 404', async () => {
+                const response = await request(app).post(`/api/v1/watch/user/1/stream`);
+                expect(response.statusCode).toBe(404);
+            });
+        });
+    });
+
     describe('when the user does not exist', () => {
         let response;
         const NOT_A_VALID_USER = 999;

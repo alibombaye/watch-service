@@ -27,7 +27,7 @@ app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
             res.status(404).send({
                 success: 'false',
                 message: e.message
-            })
+            });
         }
     }
 });
