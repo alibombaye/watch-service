@@ -72,12 +72,9 @@ describe('post /api/v1/watch', () => {
 
         describe('when the stream does exist', () => {
             describe('when the user is eligible to watch the stream', () => {
-                let response;
-
-                beforeEach(async ()=> {
+                beforeEach(()=> {
                     findUser.mockImplementation(() => {});
                     findStream.mockImplementation(() => {});
-                    response = await request(app).post(`/api/v1/watch/user/1/stream/1`);
                 });
     
                 afterEach(() => {
@@ -85,13 +82,25 @@ describe('post /api/v1/watch', () => {
                     findStream.mockReset();
                 })
 
-                test('should respond with a 201', () => {
+                test('should respond with a 201', async () => {
+                    const response = await request(app).post(`/api/v1/watch/user/1/stream/1`);
                     expect(response.statusCode).toBe(201);
                 });
 
-                test('should respond with "success: true"', () => {
+                test('should respond with "success: true"', async () => {
+                    const response = await request(app).post(`/api/v1/watch/user/1/stream/1`);
                     expect(response.body.success).toEqual('true');
                 });
+
+                test.skip('should add the stream to the users watching list', async () => {
+                    const initialStreamList = await request(app).get('/api/v1/watch/user/1')
+                    expect(initialStreamList.streams).toEqual([]);
+
+                    await request(app).post(`/api/v1/watch/user/1/stream/1`);
+
+                    const updatedStreamList = await request(app).get('/api/v1/watch/user/1')
+                    expect(updatedStreamList.streams).toEqual([1]);
+                })
             })
         });
 
