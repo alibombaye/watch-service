@@ -1,4 +1,4 @@
-import { dbAddStreamToUserWatchingList } from '../dbService';
+import { dbAddStreamToUserWatchingList, dbGetWatchingListForUser } from '../dbService';
 
 describe('dbService', () => {
     describe('dbAddStreamToUserWatchingList', () => {
@@ -11,7 +11,7 @@ describe('dbService', () => {
                 expect(watchingDb).toEqual({ 1: { streams: [1]} });
             });
 
-            test('adds a different user', () => {
+            test('adds a different user should add the additional user', () => {
                 watchingDb = { 1: { streams: [1] }};
 
                 expect(dbAddStreamToUserWatchingList(2,1)).toBe(true);
@@ -21,4 +21,14 @@ describe('dbService', () => {
         });
 
     });
+
+    describe('dbGetWatchingListForUser', () => {
+        describe('when the user is not watching anything', () => {
+            test('responds with []', () => {
+                watchingDb = {};
+                
+                expect(dbGetWatchingListForUser(1)).toEqual([]);
+            })
+        });
+    })
 });
