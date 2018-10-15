@@ -24,6 +24,15 @@ describe('dbService', () => {
             });
         });
 
+        describe('when the user is already watching a stream', () => {
+            test('should be able to watch an additional stream', () => {
+                watchingDb = { 1: { streams: [1] }};
+
+                expect(dbAddStreamToUserWatchingList(1,2)).toBe(true);
+
+                expect(watchingDb).toEqual({ 1: { streams: [1, 2] } });
+            });
+        });
     });
 
     describe('dbGetWatchingListForUser', () => {

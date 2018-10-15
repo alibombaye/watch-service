@@ -10,6 +10,16 @@ export const dbAddStreamToUserWatchingList = (userId, streamId) => {
         });
     }
 
+    else if (watchingDb[userId]) {
+        const newStreams = watchingDb[userId].streams.concat([streamId]);
+        watchingDb = ({
+            ...watchingDb,
+            [userId]:{
+                streams: newStreams
+            }
+        });
+    }
+
     return true;
 };
 

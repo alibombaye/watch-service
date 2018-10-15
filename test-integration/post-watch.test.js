@@ -101,7 +101,19 @@ describe('post /api/v1/watch', () => {
 
                     const updatedStreamList = await request(app).get('/api/v1/watch/user/1')
                     expect(updatedStreamList.body.streams).toEqual([1]);
-                })
+                });
+
+                test('should be able to watch 2 streams', async () => {
+                    watchingDb = {};
+                    const initialStreamList = await request(app).get('/api/v1/watch/user/1')
+                    expect(initialStreamList.body.streams).toEqual([]);
+
+                    await request(app).post(`/api/v1/watch/user/1/stream/1`);
+                    await request(app).post(`/api/v1/watch/user/1/stream/2`);
+
+                    const updatedStreamList = await request(app).get('/api/v1/watch/user/1')
+                    expect(updatedStreamList.body.streams).toEqual([1, 2]);
+                });
             })
         });
 
