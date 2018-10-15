@@ -3,6 +3,7 @@ import app from '../src/server/app';
 import { findUser } from '../src/connector/userServiceConnector';
 import { findStream } from '../src/connector/streamServiceConnector';
 import { StreamNotRecognisedError, UserNotRecognisedError } from '../src/errors/errors';
+import { MAX_AMOUNT_STREAMS } from '../src/constants/config';
 
 jest.mock('../src/connector/streamServiceConnector');
 jest.mock('../src/connector/userServiceConnector');
@@ -125,19 +126,21 @@ describe('post /api/v1/watch', () => {
                     expect(updatedStreamList.body.streams).toEqual([1, 2]);
                 });
 
-                test('should not be able to watch more than 3 streams', async () => {
+                test(`should not be able to watch more than ${MAX_AMOUNT_STREAMS} streams`, async () => {
                     watchingDb = {};
+                    const expectedMessage = `can not watch more than ${MAX_AMOUNT_STREAMS} stream concurrently`;
                     const initialStreamList = await request(app).get('/api/v1/watch/user/1')
                     expect(initialStreamList.body.streams).toEqual([]);
 
-                    await request(app).post(`/api/v1/watch/user/1/stream/1`);
-                    await request(app).post(`/api/v1/watch/user/1/stream/2`);
-                    await request(app).post(`/api/v1/watch/user/1/stream/3`);
-                    const response = await request(app).post(`/api/v1/watch/user/1/stream/4`);
+                    let i;
+                    for (i=0; i < MAX_AMOUNT_STREAMS; i++) {
+                        await request(app).post(`/api/v1/watch/user/1/stream/${i}`);
+                    }
+                    const response = await request(app).post(`/api/v1/watch/user/1/stream/${i+1}`);
 
                     expect(response.statusCode).toBe(400);
                     expect(response.body.success).toEqual('false');
-                    expect(response.body.message).toEqual('can not watch more than 3 stream concurrently');
+                    expect(response.body.message).toEqual(expectedMessage);
                 });
             })
         });
