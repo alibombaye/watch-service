@@ -5,6 +5,12 @@ import { UserNotRecognisedError, StreamNotRecognisedError, MaximumConcurrentStre
 
 const app = express();
 
+const createErrorResponse = (response, statusCode, success, message) => 
+    response.status(statusCode).send({
+        success,
+        message
+    });
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -24,16 +30,10 @@ app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
         });
     } catch (e) {
         if (e instanceof UserNotRecognisedError || e instanceof StreamNotRecognisedError) {
-            res.status(404).send({
-                success: 'false',
-                message: e.message
-            });
+            createErrorResponse(res, 404, 'false', e.message);
         } 
         if (e instanceof MaximumConcurrentStreamsExceeded) {
-            res.status(400).send({
-                success: 'false',
-                message: e.message                
-            });
+            createErrorResponse(res, 400, 'false', e.message);
         }
     }
 });
@@ -49,10 +49,7 @@ app.get('/api/v1/watch/user/:userId', (req, res) => {
         });
     } catch (e) {
         if (e instanceof UserNotRecognisedError) {
-            res.status(404).send({
-                success: 'false',
-                message: e.message    
-            })
+            createErrorResponse(res, 404, 'false', e.message);
         }
     }
 });
