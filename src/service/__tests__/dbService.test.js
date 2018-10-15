@@ -33,6 +33,14 @@ describe('dbService', () => {
 
                 expect(watchingDb).toEqual({ 1: { streams: [1, 2] } });
             });
+
+            test('should be able to watch the same stream', () => {
+                watchingDb = { 1: { streams: [1] }};
+
+                expect(dbAddStreamToUserWatchingList(1,1)).toBe(true);
+
+                expect(watchingDb).toEqual({ 1: { streams: [1, 1] } });
+            });
         });
 
         describe('when the user is already watching the maxmimum allowed streams', () => {
