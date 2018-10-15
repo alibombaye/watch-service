@@ -1,7 +1,11 @@
 global.watchingDb = {}
 
+const userNotWatchingAnyStreams = (userId) => !watchingDb || !watchingDb[userId];
+
+const userIsWatching = (userId) => watchingDb[userId];
+
 export const dbAddStreamToUserWatchingList = (userId, streamId) => {
-    if (!watchingDb || !watchingDb[userId]) {
+    if (userNotWatchingAnyStreams(userId)) {
         watchingDb = ({
             ...watchingDb,
             [userId]:{
@@ -10,7 +14,7 @@ export const dbAddStreamToUserWatchingList = (userId, streamId) => {
         });
     }
 
-    else if (watchingDb[userId]) {
+    else if (userIsWatching(userId)) {
         const newStreams = watchingDb[userId].streams.concat([streamId]);
         watchingDb = ({
             ...watchingDb,
@@ -24,7 +28,7 @@ export const dbAddStreamToUserWatchingList = (userId, streamId) => {
 };
 
 export const dbGetWatchingListForUser = (userId) => {
-    if (!watchingDb || !watchingDb[userId]) {
+    if (userNotWatchingAnyStreams(userId)) {
         return [];
     }
     return watchingDb[userId].streams;
