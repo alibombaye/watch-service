@@ -20,4 +20,4 @@ export const findUser = userId => {
         return true;
     }
     throw new UserNotRecognisedError('not a recognised user');
-}
+};

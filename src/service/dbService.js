@@ -36,4 +36,4 @@ export const dbGetWatchingListForUser = (userId) => {
         return [];
     }
     return watchingDb[userId].streams;
-}
+};

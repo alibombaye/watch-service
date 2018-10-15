@@ -9,7 +9,6 @@ jest.mock('../src/connector/streamServiceConnector');
 jest.mock('../src/connector/userServiceConnector');
 
 describe('post /api/v1/watch', () => {
-
     describe('Validate input parameters', () => {
         describe('when the userId is missing from the request', () => {
             test('should respond with a 404', async () => {
@@ -49,7 +48,6 @@ describe('post /api/v1/watch', () => {
     });
 
     describe('when the user does exist', () => {
-        
         describe('when the stream does not exist', () => {
             let response;
             const NOT_A_VALID_STREAM = 999;
@@ -78,7 +76,6 @@ describe('post /api/v1/watch', () => {
             test('should respond with "message: not a recognised user"', () => {
                 expect(response.body.message).toEqual('not a recognised stream');
             });
-
         });
 
         describe('when the stream does exist', () => {
@@ -91,7 +88,7 @@ describe('post /api/v1/watch', () => {
                 afterEach(() => {
                     findUser.mockReset();
                     findStream.mockReset();
-                })
+                });
 
                 test('should respond with a 201', async () => {
                     const response = await request(app).post(`/api/v1/watch/user/1/stream/1`);
@@ -142,8 +139,7 @@ describe('post /api/v1/watch', () => {
                     expect(response.body.success).toEqual('false');
                     expect(response.body.message).toEqual(expectedMessage);
                 });
-            })
+            });
         });
-
     });
 });

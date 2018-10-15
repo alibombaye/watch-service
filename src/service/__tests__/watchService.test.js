@@ -43,7 +43,6 @@ describe('addStreamToUserWatchingList', () => {
             expect(spy).toBeCalledWith(1, 1);
         });
     });
-    
 });
 
 describe('getWatchingListForUser', () => {
@@ -78,6 +77,6 @@ describe('getWatchingListForUser', () => {
 
             expect(getWatchingListForUser(1)).toEqual([1]);
             expect(spy).toBeCalledWith(1);
-        })
+        });
     });
-})
+});

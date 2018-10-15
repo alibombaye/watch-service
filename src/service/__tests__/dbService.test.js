@@ -60,7 +60,7 @@ describe('dbService', () => {
                 watchingDb = {};
                 
                 expect(dbGetWatchingListForUser(1)).toEqual([]);
-            })
+            });
         });
 
         describe('when the user is watching a single stream', () => {
@@ -68,7 +68,7 @@ describe('dbService', () => {
                 watchingDb = { 1: { streams: [1] }};
                 
                 expect(dbGetWatchingListForUser(1)).toEqual([1]);
-            })
+            });
         });
-    })
+    });
 });
