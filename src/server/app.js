@@ -1,5 +1,5 @@
 import express from 'express';
-import { watchService, getWatchingListForUser } from '../service/watchService';
+import { addStreamToUserWatchingList, getWatchingListForUser } from '../service/watchService';
 import { UserNotRecognisedError, StreamNotRecognisedError } from '../errors/errors';
 
 const app = express();
@@ -12,7 +12,7 @@ app.get('/health-check', (req, res) => {
 
 app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
     try {
-        const response = watchService(1, 1);
+        const response = addStreamToUserWatchingList(1, 1);
         res.status(201).send({
             success: 'true'
         });

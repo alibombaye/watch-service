@@ -1,4 +1,4 @@
-import { watchService, getWatchingListForUser } from '../watchService';
+import { addStreamToUserWatchingList, getWatchingListForUser } from '../watchService';
 import { UserNotRecognisedError, StreamNotRecognisedError } from '../../errors/errors';
 import { findUser } from '../../connector/userServiceConnector';
 import { findStream } from '../../connector/streamServiceConnector';
@@ -6,7 +6,7 @@ import { findStream } from '../../connector/streamServiceConnector';
 jest.mock('../../connector/userServiceConnector');
 jest.mock('../../connector/streamServiceConnector');
 
-describe('watch-service', () => {
+describe('addStreamToUserWatchingList', () => {
     afterEach(() => {
         findUser.mockReset();
         findStream.mockReset();
@@ -17,7 +17,7 @@ describe('watch-service', () => {
             findUser.mockImplementation(() => {
                 throw new UserNotRecognisedError('not a recognised user')
             });
-            expect(() => watchService(999, 1)).toThrowError(new UserNotRecognisedError('not a recognised user'));
+            expect(() => addStreamToUserWatchingList(999, 1)).toThrowError(new UserNotRecognisedError('not a recognised user'));
         });
     });
 
@@ -27,7 +27,7 @@ describe('watch-service', () => {
             findStream.mockImplementation(() => {
                 throw new StreamNotRecognisedError('not a recognised stream')
             });
-            expect(() => watchService(999, 1)).toThrowError(new StreamNotRecognisedError('not a recognised stream'));
+            expect(() => addStreamToUserWatchingList(999, 1)).toThrowError(new StreamNotRecognisedError('not a recognised stream'));
         });
     });
     
