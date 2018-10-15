@@ -113,3 +113,13 @@ describe('post /api/v1/watch', () => {
 
     });
 });
+
+describe('get /api/v1/watch', () => {
+    describe('when the user does not exist', () => {
+        test('should respond with a 404', async () => {
+            const NOT_A_VALID_USER = 999;
+            const response = await request(app).get(`/api/v1/watch/user/${NOT_A_VALID_USER}`);
+            expect(response.statusCode).toBe(404);
+        });
+    })
+});
