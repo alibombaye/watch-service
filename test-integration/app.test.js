@@ -164,6 +164,10 @@ describe('get /api/v1/watch', () => {
             test('should respond with "message: user is currently not watching any streams"', () => {
                 expect(response.body.message).toEqual('user is currently not watching any streams');
             });
+
+            test('should respond with "streams: []"', () => {
+                expect(response.body.streams).toEqual([]);
+            });
         });
     });
 });

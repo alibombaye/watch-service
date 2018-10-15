@@ -31,7 +31,8 @@ app.get('/api/v1/watch/user/:userId', (req, res) => {
         const response = getWatchingListForUser(1);
         res.status(200).send({
             success: 'true',
-            message: 'user is currently not watching any streams'
+            message: 'user is currently not watching any streams',
+            streams: response
         });
     } catch (e) {
         if (e instanceof UserNotRecognisedError) {
