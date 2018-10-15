@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { addStreamToUserWatchingList, getWatchingListForUser } from '../service/watchService';
-import { UserNotRecognisedError, StreamNotRecognisedError } from '../errors/errors';
+import { UserNotRecognisedError, StreamNotRecognisedError, MaximumConcurrentStreamsExceeded } from '../errors/errors';
 
 const app = express();
 
@@ -27,6 +27,12 @@ app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
             res.status(404).send({
                 success: 'false',
                 message: e.message
+            });
+        } 
+        if (e instanceof MaximumConcurrentStreamsExceeded) {
+            res.status(400).send({
+                success: 'false',
+                message: e.message                
             });
         }
     }

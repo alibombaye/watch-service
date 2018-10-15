@@ -124,6 +124,21 @@ describe('post /api/v1/watch', () => {
                     const updatedStreamList = await request(app).get('/api/v1/watch/user/1')
                     expect(updatedStreamList.body.streams).toEqual([1, 2]);
                 });
+
+                test('should not be able to watch more than 3 streams', async () => {
+                    watchingDb = {};
+                    const initialStreamList = await request(app).get('/api/v1/watch/user/1')
+                    expect(initialStreamList.body.streams).toEqual([]);
+
+                    await request(app).post(`/api/v1/watch/user/1/stream/1`);
+                    await request(app).post(`/api/v1/watch/user/1/stream/2`);
+                    await request(app).post(`/api/v1/watch/user/1/stream/3`);
+                    const response = await request(app).post(`/api/v1/watch/user/1/stream/4`);
+
+                    expect(response.statusCode).toBe(400);
+                    expect(response.body.success).toEqual('false');
+                    expect(response.body.message).toEqual('can not watch more than 3 stream concurrently');
+                });
             })
         });
 
