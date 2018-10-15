@@ -7,25 +7,23 @@ const userNotWatchingAnyStreams = (userId) => !watchingDb || !watchingDb[userId]
 
 const userIsWatching = (userId) => watchingDb[userId];
 
+const updateWatchingDd = (userId, streams) => {
+    watchingDb = Object.assign({}, watchingDb, {
+        [userId]:{
+            streams
+        }
+    });
+};
+
 export const dbAddStreamToUserWatchingList = (userId, streamId) => {
     if (userNotWatchingAnyStreams(userId)) {
-        watchingDb = ({
-            ...watchingDb,
-            [userId]:{
-                streams: [streamId]
-            }
-        });
+        updateWatchingDd(userId, [streamId]);
     }
 
     else if (userIsWatching(userId)) {
         const newStreams = watchingDb[userId].streams.concat([streamId]);
         if (newStreams.length > MAX_AMOUNT_STREAMS) throw new MaximumConcurrentStreamsExceeded(`can not watch more than ${MAX_AMOUNT_STREAMS} stream concurrently`);
-        watchingDb = ({
-            ...watchingDb,
-            [userId]:{
-                streams: newStreams
-            }
-        });
+        updateWatchingDd(userId, newStreams);
     }
 
     return true;
