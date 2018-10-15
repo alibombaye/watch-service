@@ -13,7 +13,9 @@ app.get('/health-check', (req, res) => {
 app.post('/api/v1/watch/user/:userId/stream/:streamId', (req, res) => {
     try {
         const response = watchService(1, 1);
-        res.status(201).send({});
+        res.status(201).send({
+            success: 'true'
+        });
     } catch (e) {
         if (e instanceof UserNotRecognisedError || e instanceof StreamNotRecognisedError) {
             res.status(404).send({

@@ -89,7 +89,7 @@ describe('post /api/v1/watch', () => {
         describe('when the stream does exist', () => {
             describe('when the user is eligible to watch the stream', () => {
                 let response;
-                
+
                 beforeEach(async ()=> {
                     findUser.mockImplementation(() => {});
                     findStream.mockImplementation(() => {});
@@ -103,6 +103,10 @@ describe('post /api/v1/watch', () => {
 
                 test('should respond with a 201', () => {
                     expect(response.statusCode).toBe(201);
+                });
+
+                test('should respond with "success: true"', () => {
+                    expect(response.body.success).toEqual('true');
                 });
             })
         });
