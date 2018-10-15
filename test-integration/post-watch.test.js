@@ -92,14 +92,15 @@ describe('post /api/v1/watch', () => {
                     expect(response.body.success).toEqual('true');
                 });
 
-                test.skip('should add the stream to the users watching list', async () => {
+                test('should add the stream to the users watching list', async () => {
+                    watchingDb = {};
                     const initialStreamList = await request(app).get('/api/v1/watch/user/1')
-                    expect(initialStreamList.streams).toEqual([]);
+                    expect(initialStreamList.body.streams).toEqual([]);
 
                     await request(app).post(`/api/v1/watch/user/1/stream/1`);
 
                     const updatedStreamList = await request(app).get('/api/v1/watch/user/1')
-                    expect(updatedStreamList.streams).toEqual([1]);
+                    expect(updatedStreamList.body.streams).toEqual([1]);
                 })
             })
         });

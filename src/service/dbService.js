@@ -17,4 +17,5 @@ export const dbGetWatchingListForUser = (userId) => {
     if (!watchingDb || !watchingDb[userId]) {
         return [];
     }
+    return watchingDb[userId].streams;
 }

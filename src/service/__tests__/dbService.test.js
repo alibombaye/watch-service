@@ -1,6 +1,10 @@
 import { dbAddStreamToUserWatchingList, dbGetWatchingListForUser } from '../dbService';
 
 describe('dbService', () => {
+    afterEach(() => {
+        watchingDb = {}
+    });
+
     describe('dbAddStreamToUserWatchingList', () => {
         describe('when the user is not watching anything', () => {
             test('returns true and adds the user to the watching list with the stream', () => {
@@ -28,6 +32,14 @@ describe('dbService', () => {
                 watchingDb = {};
                 
                 expect(dbGetWatchingListForUser(1)).toEqual([]);
+            })
+        });
+
+        describe('when the user is watching a single stream', () => {
+            test('responds with [1]', () => {
+                watchingDb = { 1: { streams: [1] }};
+                
+                expect(dbGetWatchingListForUser(1)).toEqual([1]);
             })
         });
     })
