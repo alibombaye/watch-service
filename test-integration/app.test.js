@@ -86,5 +86,26 @@ describe('post /api/v1/watch', () => {
 
         });
 
+        describe('when the stream does exist', () => {
+            describe('when the user is eligible to watch the stream', () => {
+                let response;
+                
+                beforeEach(async ()=> {
+                    findUser.mockImplementation(() => {});
+                    findStream.mockImplementation(() => {});
+                    response = await request(app).post(`/api/v1/watch/user/1/stream/1`);
+                });
+    
+                afterEach(() => {
+                    findUser.mockReset();
+                    findStream.mockReset();
+                })
+
+                test('should respond with a 201', () => {
+                    expect(response.statusCode).toBe(201);
+                });
+            })
+        });
+
     });
 });
