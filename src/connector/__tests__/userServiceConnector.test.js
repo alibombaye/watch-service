@@ -14,6 +14,6 @@ describe('userServiceConnector', () => {
             test('responds with true if the user does exist', () => {
                 expect(findUser(1)).toBe(true);
             });
-        })
+        });
     });
 })
