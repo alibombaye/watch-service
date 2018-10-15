@@ -1,4 +1,5 @@
 import { dbAddStreamToUserWatchingList, dbGetWatchingListForUser } from '../dbService';
+import { MaximumConcurrentStreamsExceeded } from '../../errors/errors';
 
 describe('dbService', () => {
     afterEach(() => {
@@ -31,6 +32,14 @@ describe('dbService', () => {
                 expect(dbAddStreamToUserWatchingList(1,2)).toBe(true);
 
                 expect(watchingDb).toEqual({ 1: { streams: [1, 2] } });
+            });
+        });
+
+        describe('when the user is already watching the maxmimum allowed streams', () => {
+            test('should be able to watch an additional stream', () => {
+                watchingDb = { 1: { streams: [1, 2, 3] }};
+
+                expect(() => dbAddStreamToUserWatchingList(1, 4)).toThrowError(new MaximumConcurrentStreamsExceeded('can not watch more than 3 stream concurrently'));
             });
         });
     });

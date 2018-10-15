@@ -1,3 +1,5 @@
+import { MaximumConcurrentStreamsExceeded } from '../errors/errors';
+
 global.watchingDb = {}
 
 const userNotWatchingAnyStreams = (userId) => !watchingDb || !watchingDb[userId];
@@ -16,6 +18,7 @@ export const dbAddStreamToUserWatchingList = (userId, streamId) => {
 
     else if (userIsWatching(userId)) {
         const newStreams = watchingDb[userId].streams.concat([streamId]);
+        if (newStreams.length > 3) throw new MaximumConcurrentStreamsExceeded('can not watch more than 3 stream concurrently');
         watchingDb = ({
             ...watchingDb,
             [userId]:{
