@@ -29,9 +29,4 @@ export const dbAddStreamToUserWatchingList = (userId, streamId) => {
     return true;
 };
 
-export const dbGetWatchingListForUser = (userId) => {
-    if (userNotWatchingAnyStreams(userId)) {
-        return [];
-    }
-    return watchingDb[userId].streams;
-};
+export const dbGetWatchingListForUser = (userId) => userNotWatchingAnyStreams(userId) ? [] : watchingDb[userId].streams;
