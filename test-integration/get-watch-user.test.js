@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../src/server/app';
-import { findUser } from '../src/connector/userServiceConnector';
+import { isUserValid } from '../src/connector/userServiceConnector';
 import { UserNotRecognisedError } from '../src/errors/errors';
 
 jest.mock('../src/connector/userServiceConnector');
@@ -20,14 +20,14 @@ describe('get /api/v1/watch', () => {
         const NOT_A_VALID_USER = 999;
 
         beforeEach(async ()=> {
-            findUser.mockImplementation(() => {
+            isUserValid.mockImplementation(() => {
                 throw new UserNotRecognisedError('not a recognised user')
             });
             response = await request(app).get(`/api/v1/watch/user/${NOT_A_VALID_USER}`);
         });
         
         afterEach(() => {
-            findUser.mockReset();
+            isUserValid.mockReset();
         });
 
         test('should respond with a 404', () => {
@@ -48,12 +48,12 @@ describe('get /api/v1/watch', () => {
             let response;
     
             beforeEach(async ()=> {
-                findUser.mockImplementation(() => {});
+                isUserValid.mockImplementation(() => {});
                 response = await request(app).get(`/api/v1/watch/user/1`);
             });
 
             afterEach(() => {
-                findUser.mockReset();
+                isUserValid.mockReset();
             });
 
             test('should respond with a 200', () => {

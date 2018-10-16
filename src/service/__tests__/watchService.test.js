@@ -1,6 +1,6 @@
 import { getWatchingListForUser, addStreamToUserWatchingList } from '../watchService';
 import { UserNotRecognisedError, StreamNotRecognisedError } from '../../errors/errors';
-import { findUser } from '../../connector/userServiceConnector';
+import { isUserValid } from '../../connector/userServiceConnector';
 import { findStream } from '../../connector/streamServiceConnector';
 import * as DbService from '../dbService';
 
@@ -10,13 +10,13 @@ jest.mock('../dbService');
 
 describe('addStreamToUserWatchingList', () => {
     afterEach(() => {
-        findUser.mockReset();
+        isUserValid.mockReset();
         findStream.mockReset();
     });
 
     describe('when the user does not exist', () => {
         test('throws an UserNotRecognisedError', () => {
-            findUser.mockImplementation(() => {
+            isUserValid.mockImplementation(() => {
                 throw new UserNotRecognisedError('not a recognised user')
             });
             expect(() => addStreamToUserWatchingList(999, 1)).toThrowError(new UserNotRecognisedError('not a recognised user'));
@@ -25,7 +25,7 @@ describe('addStreamToUserWatchingList', () => {
 
     describe('when the stream does not exist', () => {
         test('throws a StreamIsNotRecognisedError', () => {
-            findUser.mockImplementation(() => {});
+            isUserValid.mockImplementation(() => {});
             findStream.mockImplementation(() => {
                 throw new StreamNotRecognisedError('not a recognised stream')
             });
@@ -35,7 +35,7 @@ describe('addStreamToUserWatchingList', () => {
 
     describe('when the user and stream does exist', () => {
         test('adds the stream to the users watching list', () => {
-            findUser.mockImplementation(() => {});
+            isUserValid.mockImplementation(() => {});
             findStream.mockImplementation(() => {}); 
             const spy = jest.spyOn(DbService, 'dbAddStreamToUserWatchingList').mockImplementation(() => true);
 
@@ -47,13 +47,13 @@ describe('addStreamToUserWatchingList', () => {
 
 describe('getWatchingListForUser', () => {
     afterEach(() => {
-        findUser.mockReset();
+        isUserValid.mockReset();
         findStream.mockReset();
     });
 
     describe('when the user does not exist', () => {
         test('throws an UserNotRecognisedError', () => {
-            findUser.mockImplementation(() => {
+            isUserValid.mockImplementation(() => {
                 throw new UserNotRecognisedError('not a recognised user')
             });
             expect(() => getWatchingListForUser(999, 1)).toThrowError(new UserNotRecognisedError('not a recognised user'));
@@ -63,7 +63,7 @@ describe('getWatchingListForUser', () => {
     describe('when the user does exist', () => {
         describe('when the user is not watching anything', () => {
             test('should respond with []', () => {
-                findUser.mockImplementation(() => {});
+                isUserValid.mockImplementation(() => {});
                 const spy = jest.spyOn(DbService, 'dbGetWatchingListForUser').mockImplementation(() => []);
 
                 expect(getWatchingListForUser(1)).toEqual([]);
@@ -72,7 +72,7 @@ describe('getWatchingListForUser', () => {
         });
 
         describe('when the user is watching a single stream', () => {
-            findUser.mockImplementation(() => {});
+            isUserValid.mockImplementation(() => {});
             const spy = jest.spyOn(DbService, 'dbGetWatchingListForUser').mockImplementation(() => [1]);
 
             expect(getWatchingListForUser(1)).toEqual([1]);

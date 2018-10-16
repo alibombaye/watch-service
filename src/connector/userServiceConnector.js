@@ -13,7 +13,7 @@ const users = {
 };
 
 
-export const findUser = userId => {
+export const isUserValid = userId => {
     const user = users[userId];
 
     if (user) {

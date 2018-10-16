@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../src/server/app';
-import { findUser } from '../src/connector/userServiceConnector';
+import { isUserValid } from '../src/connector/userServiceConnector';
 import { findStream } from '../src/connector/streamServiceConnector';
 import { StreamNotRecognisedError, UserNotRecognisedError } from '../src/errors/errors';
 import { MAX_AMOUNT_STREAMS } from '../src/constants/config';
@@ -23,14 +23,14 @@ describe('post /api/v1/watch', () => {
         const NOT_A_VALID_USER = 999;
 
         beforeEach(async ()=> {
-            findUser.mockImplementation(() => {
+            isUserValid.mockImplementation(() => {
                 throw new UserNotRecognisedError('not a recognised user')
             });
             response = await request(app).post(`/api/v1/watch/user/${NOT_A_VALID_USER}/stream/1`);
         });
         
         afterEach(() => {
-            findUser.mockReset();
+            isUserValid.mockReset();
             findStream.mockReset();
         })
 
@@ -53,7 +53,7 @@ describe('post /api/v1/watch', () => {
             const NOT_A_VALID_STREAM = 999;
     
             beforeEach(async ()=> {
-                findUser.mockImplementation(() => {});
+                isUserValid.mockImplementation(() => {});
                 findStream.mockImplementation(() => {
                     throw new StreamNotRecognisedError('not a recognised stream')
                 });
@@ -61,7 +61,7 @@ describe('post /api/v1/watch', () => {
             });
 
             afterEach(() => {
-                findUser.mockReset();
+                isUserValid.mockReset();
                 findStream.mockReset();
             })
 
@@ -81,12 +81,12 @@ describe('post /api/v1/watch', () => {
         describe('when the stream does exist', () => {
             describe('when the user is eligible to watch the stream', () => {
                 beforeEach(()=> {
-                    findUser.mockImplementation(() => {});
+                    isUserValid.mockImplementation(() => {});
                     findStream.mockImplementation(() => {});
                 });
     
                 afterEach(() => {
-                    findUser.mockReset();
+                    isUserValid.mockReset();
                     findStream.mockReset();
                 });
 
