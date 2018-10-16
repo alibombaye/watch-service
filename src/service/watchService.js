@@ -1,10 +1,10 @@
 import { isUserValid } from '../connector/userServiceConnector';
-import { findStream } from '../connector/streamServiceConnector';
+import { isStreamValid } from '../connector/streamServiceConnector';
 import { dbAddStreamToUserWatchingList, dbGetWatchingListForUser } from './dbService';
 
 export const addStreamToUserWatchingList = (userId, streamId) => {
     isUserValid(userId);
-    findStream(streamId);
+    isStreamValid(streamId);
     return dbAddStreamToUserWatchingList(userId, streamId);
 };
 

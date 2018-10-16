@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../src/server/app';
 import { isUserValid } from '../src/connector/userServiceConnector';
-import { findStream } from '../src/connector/streamServiceConnector';
+import { isStreamValid } from '../src/connector/streamServiceConnector';
 import { StreamNotRecognisedError, UserNotRecognisedError } from '../src/errors/errors';
 import { MAX_AMOUNT_STREAMS } from '../src/constants/config';
 
@@ -31,7 +31,7 @@ describe('post /api/v1/watch', () => {
         
         afterEach(() => {
             isUserValid.mockReset();
-            findStream.mockReset();
+            isStreamValid.mockReset();
         })
 
         test('should respond with a 404', () => {
@@ -54,7 +54,7 @@ describe('post /api/v1/watch', () => {
     
             beforeEach(async ()=> {
                 isUserValid.mockImplementation(() => {});
-                findStream.mockImplementation(() => {
+                isStreamValid.mockImplementation(() => {
                     throw new StreamNotRecognisedError('not a recognised stream')
                 });
                 response = await request(app).post(`/api/v1/watch/user/1/stream/${NOT_A_VALID_STREAM}`);
@@ -62,7 +62,7 @@ describe('post /api/v1/watch', () => {
 
             afterEach(() => {
                 isUserValid.mockReset();
-                findStream.mockReset();
+                isStreamValid.mockReset();
             })
 
             test('should respond with a 404', () => {
@@ -82,12 +82,12 @@ describe('post /api/v1/watch', () => {
             describe('when the user is eligible to watch the stream', () => {
                 beforeEach(()=> {
                     isUserValid.mockImplementation(() => {});
-                    findStream.mockImplementation(() => {});
+                    isStreamValid.mockImplementation(() => {});
                 });
     
                 afterEach(() => {
                     isUserValid.mockReset();
-                    findStream.mockReset();
+                    isStreamValid.mockReset();
                 });
 
                 test('should respond with a 201', async () => {

@@ -18,7 +18,7 @@ const streams = {
     }
 };
 
-export const findStream = streamId => {
+export const isStreamValid = streamId => {
     const stream = streams[streamId];
 
     if (stream) {

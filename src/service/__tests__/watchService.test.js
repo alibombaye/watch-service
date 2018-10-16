@@ -1,7 +1,7 @@
 import { getWatchingListForUser, addStreamToUserWatchingList } from '../watchService';
 import { UserNotRecognisedError, StreamNotRecognisedError } from '../../errors/errors';
 import { isUserValid } from '../../connector/userServiceConnector';
-import { findStream } from '../../connector/streamServiceConnector';
+import { isStreamValid } from '../../connector/streamServiceConnector';
 import * as DbService from '../dbService';
 
 jest.mock('../../connector/userServiceConnector');
@@ -11,7 +11,7 @@ jest.mock('../dbService');
 describe('addStreamToUserWatchingList', () => {
     afterEach(() => {
         isUserValid.mockReset();
-        findStream.mockReset();
+        isStreamValid.mockReset();
     });
 
     describe('when the user does not exist', () => {
@@ -26,7 +26,7 @@ describe('addStreamToUserWatchingList', () => {
     describe('when the stream does not exist', () => {
         test('throws a StreamIsNotRecognisedError', () => {
             isUserValid.mockImplementation(() => {});
-            findStream.mockImplementation(() => {
+            isStreamValid.mockImplementation(() => {
                 throw new StreamNotRecognisedError('not a recognised stream')
             });
             expect(() => addStreamToUserWatchingList(999, 1)).toThrowError(new StreamNotRecognisedError('not a recognised stream'));
@@ -36,7 +36,7 @@ describe('addStreamToUserWatchingList', () => {
     describe('when the user and stream does exist', () => {
         test('adds the stream to the users watching list', () => {
             isUserValid.mockImplementation(() => {});
-            findStream.mockImplementation(() => {}); 
+            isStreamValid.mockImplementation(() => {}); 
             const spy = jest.spyOn(DbService, 'dbAddStreamToUserWatchingList').mockImplementation(() => true);
 
             expect(addStreamToUserWatchingList(1, 1)).toBe(true);
@@ -48,7 +48,7 @@ describe('addStreamToUserWatchingList', () => {
 describe('getWatchingListForUser', () => {
     afterEach(() => {
         isUserValid.mockReset();
-        findStream.mockReset();
+        isStreamValid.mockReset();
     });
 
     describe('when the user does not exist', () => {
